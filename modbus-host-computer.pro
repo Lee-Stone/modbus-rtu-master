@@ -19,12 +19,6 @@ FORMS += \
 RESOURCES += \
     resources.qrc
 
-TRANSLATIONS += \
-    translations/modbus_zh_CN.ts \
-    translations/modbus_en_US.ts
-
-
-
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin

@@ -1,0 +1,60 @@
+name: Build and Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        required: true
+        default: '1.0.0'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.11.0'
+          host: 'windows'
+          target: 'desktop'
+          arch: 'win64_mingw'
+          modules: 'qtserialbus qtserialport'
+          cache: true
+
+      - name: Build
+        shell: cmd
+        run: |
+          mkdir build
+          cd build
+          qmake ..\modbus-host-computer.pro -spec win32-g++ "CONFIG+=release"
+          mingw32-make -j4
+
+      - name: Deploy (windeployqt)
+        shell: cmd
+        run: |
+          mkdir deploy
+          copy build\release\modbus-host-computer.exe deploy\
+          windeployqt --release --no-translations deploy\modbus-host-computer.exe
+
+      - name: Package
+        shell: pwsh
+        run: |
+          Compress-Archive -Path deploy\* -DestinationPath modbus-rtu-master.zip
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ github.event.inputs.version }}
+          name: Release v${{ github.event.inputs.version }}
+          body: |
+            ## Modbus RTU Master v${{ github.event.inputs.version }}
+
+            下载 `modbus-rtu-master.zip`，解压后运行其中的 `modbus-host-computer.exe` 即可使用，无需安装 Qt 运行时。
+          files: modbus-rtu-master.zip
