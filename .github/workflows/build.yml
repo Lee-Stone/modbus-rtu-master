@@ -21,7 +21,7 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
-          version: '6.11.0'
+          version: '6.8.3'
           host: 'windows'
           target: 'desktop'
           arch: 'win64_mingw'
@@ -36,7 +36,7 @@ jobs:
           qmake ..\modbus-host-computer.pro -spec win32-g++ "CONFIG+=release"
           mingw32-make -j4
 
-      - name: Deploy (windeployqt)
+      - name: Deploy
         shell: cmd
         run: |
           mkdir deploy
@@ -53,8 +53,4 @@ jobs:
         with:
           tag_name: v${{ github.event.inputs.version }}
           name: Release v${{ github.event.inputs.version }}
-          body: |
-            ## Modbus RTU Master v${{ github.event.inputs.version }}
-
-            下载 `modbus-rtu-master.zip`，解压后运行其中的 `modbus-host-computer.exe` 即可使用，无需安装 Qt 运行时。
           files: modbus-rtu-master.zip
