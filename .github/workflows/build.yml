@@ -26,7 +26,13 @@ jobs:
           target: 'desktop'
           arch: 'win64_mingw'
           modules: 'qtserialbus qtserialport'
+          tools: 'tools_mingw1310'
           cache: true
+
+      - name: Add Qt MinGW to PATH
+        shell: pwsh
+        run: |
+          Add-Content $env:GITHUB_PATH "${{ env.IQTA_TOOLS }}\mingw1310_64\bin"
 
       - name: Build
         shell: cmd
