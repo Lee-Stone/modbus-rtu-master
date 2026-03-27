@@ -1,4 +1,4 @@
-# modbus-host-computer
+# modbus-rtu-master
 
 基于 Qt 6 开发的 Modbus RTU 上位机，支持串口连接配置、保持寄存器与线圈的读写操作、通信日志、串口热插拔检测及中英文界面切换。
 
@@ -53,15 +53,15 @@
 ## 📁 项目结构
 
 ```
-modbus-host-computer/
+modbus-rtu-master/
 ├── icons/
-│   └── app.svg                 # 应用图标（SVG）
-├── build/                      # 构建输出目录（Qt Creator 影子构建）
+│   ├── app.svg                 # 应用图标源文件（SVG）
+│   └── app.ico                 # 应用图标（ICO，嵌入 exe）
 ├── main.cpp                    # 程序入口，设置应用图标
 ├── widget.h                    # 主窗口头文件
 ├── widget.cpp                  # 主窗口逻辑实现
 ├── widget.ui                   # Qt Designer UI 布局文件
-├── modbus-host-computer.pro    # qmake 项目配置文件
+├── modbus-rtu-master.pro       # qmake 项目配置文件
 ├── resources.qrc               # Qt 资源文件（图标）
 ├── README.md
 └── .gitignore
@@ -87,15 +87,22 @@ QT += widgets serialbus serialport
 
 ## ▶️ 编译与运行
 
-### 使用 Qt Creator
+### 直接使用 Release
+
+1. 前往 [Releases](https://github.com/Lee-Stone/modbus-rtu-master/releases) 页面
+2. 下载最新版本的 `modbus-rtu-master.zip`
+3. 解压到任意目录
+4. 双击运行 `modbus-rtu-master.exe`
+
+### 使用 Qt Creator 编译
 
 1. 克隆仓库：
 
-   ```bash
-   git clone https://github.com/YourUsername/modbus-host-computer.git
+   ```bat
+   git clone https://github.com/Lee-Stone/modbus-rtu-master.git
    ```
 
-2. 用 Qt Creator 打开 `modbus-host-computer.pro`
+2. 用 Qt Creator 打开 `modbus-rtu-master.pro`
 
 3. 选择套件 **Desktop Qt 6.x.x MinGW 64-bit**
 
@@ -103,21 +110,25 @@ QT += widgets serialbus serialport
 
 5. 运行：`Ctrl+R`
 
-### 使用命令行
+### 使用命令行编译
 
-```bash
-cd modbus-host-computer
-mkdir build && cd build
-qmake ../modbus-host-computer.pro -spec win32-g++ "CONFIG+=debug"
+> 需要将 Qt 的 `bin` 目录（如 `C:\Qt\6.x.x\mingw_64\bin`）和 MinGW 的 `bin` 目录加入 `PATH`，或使用 Qt Creator 自带的 Developer Command Prompt。
+
+```bat
+git clone https://github.com/Lee-Stone/modbus-rtu-master.git
+cd modbus-rtu-master
+mkdir build
+cd build
+qmake ..\modbus-rtu-master.pro -spec win32-g++ "CONFIG+=release"
 mingw32-make -j4
 ```
 
-### 配置 exe 图标（可选）
+编译完成后 exe 位于 `build\release\modbus-rtu-master.exe`。若需连同 Qt 运行时一起打包分发，在 Qt 命令行中执行：
 
-若需要在 Windows 资源管理器中显示自定义图标，将 `icons/app.svg` 导出为 `icons/app.ico`，然后在 `modbus-host-computer.pro` 中添加：
-
-```
-RC_ICONS = icons/app.ico
+```bat
+mkdir deploy
+copy build\release\modbus-rtu-master.exe deploy\
+windeployqt --release --no-translations deploy\modbus-rtu-master.exe
 ```
 
 ## 🎮 使用说明
@@ -158,5 +169,5 @@ RC_ICONS = icons/app.ico
 
 ## 📧 联系方式
 
-- **GitHub**：[https://github.com/CaddonThaw](https://github.com/CaddonThaw)
-- **Bilibili**：[https://space.bilibili.com/CaddonThaw](https://space.bilibili.com)
+- 🐧：2103539430
+- 🛰：Ubuntu_Noble

@@ -1,4 +1,4 @@
-name: Build and Release
+name: Build
 
 on:
   workflow_dispatch:
@@ -39,15 +39,15 @@ jobs:
         run: |
           mkdir build
           cd build
-          qmake ..\modbus-host-computer.pro -spec win32-g++ "CONFIG+=release"
+          qmake ..\modbus-rtu-master.pro -spec win32-g++ "CONFIG+=release"
           mingw32-make -j4
 
       - name: Deploy
         shell: cmd
         run: |
           mkdir deploy
-          copy build\release\modbus-host-computer.exe deploy\
-          windeployqt --release --no-translations deploy\modbus-host-computer.exe
+          copy build\release\modbus-rtu-master.exe deploy\
+          windeployqt --release --no-translations deploy\modbus-rtu-master.exe
 
       - name: Package
         shell: pwsh
@@ -58,5 +58,5 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ github.event.inputs.version }}
-          name: Release v${{ github.event.inputs.version }}
+          name: v${{ github.event.inputs.version }}
           files: modbus-rtu-master.zip
